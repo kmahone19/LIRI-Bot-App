@@ -24,7 +24,9 @@ function concertThis() {
     var queryUrl = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp";
     axios.get(queryUrl)
         .then(function (response) {
-            console.log(response);
+            console.log(response.EventData.VenueData.name);
+            console.log(response.EventData.VenueData.city, response.EventData.VenueData.region);
+            console.log(response.EventData.datetime);
         })
         .catch(function (error) {
             console.log(error);
@@ -51,7 +53,14 @@ function movieThis() {
     var queryURL = "http://www.omdbapi.com/?i=tt3896198&apikey=a635e7be&t="+ searchTerm
     axios.get(queryURL)
         .then(function (response) {
-            console.log(response);
+            var data = response.data;
+            console.log(data.title);
+            console.log(data.Year);
+            console.log(data.IMDBrating);
+            console.log(data.rating);
+            console.log(data.country);
+            console.log(data.plot);
+            console.log(data.actors);
         })
         .catch(function (error) {
             console.log(error);
