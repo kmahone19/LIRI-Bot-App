@@ -1,3 +1,4 @@
+// pulls in all important packages to be used
 require("dotenv").config();
 const Spotify = require('node-spotify-api')
 var keys = require("./keys.js");
@@ -5,9 +6,11 @@ var axios = require("axios");
 var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 
+// pulls in the the important input arguments and assings them to a variable
 var comand = process.argv[2];
 var searchTerm = process.argv[3];
 
+// checks the the first input for a comand and runs the corrisponding comand 
 switch (comand) {
     case "concert-this":
         concertThis();
@@ -29,7 +32,10 @@ function concertThis() {
     var queryUrl = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp";
     axios.get(queryUrl)
         .then(function (response) {
-            console.log(response.data)
+            console.log(response.data[0].venue);
+            // for(var i=0;i,10;i++){
+            //     console.log(response.data.venue)
+            // }
         })
         .catch(function (error) {
             console.log(error);
@@ -47,8 +53,17 @@ function spotifyThis() {
         if (err) {
             return console.log(err);
         }
+        // console.log(JSON.stringify(data.tracks.items, null, 2))
+        for (var i = 0; i < 10; i++) {
+            console.log(`
+Artist Name: ${data.tracks.items[i].artists[0].name}
+Song name: ${data.tracks.items[i].name}
+Album name: ${data.tracks.items[i].album.name}
+Preview: ${data.tracks.items[i].preview_url}
 
-        console.log(JSON.stringify(data, null, 2));
+==============
+            `)
+        }
     });
 }
 
@@ -59,7 +74,16 @@ function movieThis() {
     axios.get(queryUrl)
         .then(function (response) {
             var data = response.data;
-            console.log(data);
+            console.log(
+    `++++++++++++++++++++
+    Title: ${data.Title}
+    Year: ${data.Year}
+    IMDB Rating: ${data.Ratings[0].Value}
+    Rotten Tomatoes: ${data.Ratings[1].Value}
+    Country: ${data.Country}
+    Languages: ${data.Language}
+    Actors: ${data.Actors}
++++++++++++++++++++++`);
         })
         .catch(function (error) {
             console.log(error);
@@ -68,14 +92,26 @@ function movieThis() {
 
 // reads the random.txt and runs what ever comand and search term are in it 
 function doWhatItSays() {
-    fs.readFile("movies.txt", "utf8", function (error, data) {
+    fs.readFile("random.txt", "utf8", function (error, data) {
 
         if (error) {
             return console.log(error);
         }
+        console.log(data.split(","))
+
         var dataArr = data.split(",");
+        let searchTerm = dataArr[1];
 
-        console.log(dataArr);
-
+        switch (dataArr[0]) {
+            case "concert-this":
+                concertThis(searchTerm);
+                break;
+            case "spotify-this-song":
+                spotifyThis(searchTerm);
+                break;
+            case "movie-this":
+                movieThis(searchTerm);
+                break;
+        }
     });
 }
