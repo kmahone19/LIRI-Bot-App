@@ -20,7 +20,7 @@ switch (comand) {
         spotifyThis(searchTerm);
         break;
     case "movie-this":
-        movieThis(searchTerm);
+        movieThis(searchTerm || "mr.nobody");
         break;
     case "do-what-it-says":
         doWhatItSays(searchTerm);
@@ -81,7 +81,6 @@ Preview: ${data.tracks.items[i].preview_url}
 
 // searches movie and prints title, year, IMDB and rotten tomatoes ratings, country, language, plot, and actors
 function movieThis(str) {
-
 
     var queryUrl = "http://www.omdbapi.com/?t=" + str + "&y=&plot=short&apikey=trilogy";
     axios.get(queryUrl)
