@@ -26,7 +26,7 @@ switch (comand) {
         doWhatItSays(searchTerm);
         break;
     default:
-        "Why don't you try that again."
+        console.log("Why don't you try that again.")
         break;
 }
 
